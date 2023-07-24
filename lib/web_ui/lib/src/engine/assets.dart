@@ -101,15 +101,7 @@ class AssetManager {
   /// Loads an asset using an [DomXMLHttpRequest] and returns data as [ByteData].
   Future<ByteData> load(String asset) async {
     print('AZAZAZAZA AssetManager.load');
-    final String url = getAssetUrl(asset);
-    final HttpFetchResponse response = await httpFetch(url);
-
-    if (response.status == 404 && asset == 'AssetManifest.json') {
-      printWarning('Asset manifest does not exist at `$url` - ignoring.');
-      return Uint8List.fromList(utf8.encode('{}')).buffer.asByteData();
-    }
-
-    return (await response.payload.asByteBuffer()).asByteData();
+    throw 'AZAZAZAZAZAZ';
   }
 }
 

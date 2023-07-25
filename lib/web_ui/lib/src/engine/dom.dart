@@ -1393,7 +1393,55 @@ extension DomCanvasGradientExtension on DomCanvasGradient {
 
 @JS()
 @staticInterop
+class DomXMLHttpRequest extends DomXMLHttpRequestEventTarget {}
+
+DomXMLHttpRequest createDomXMLHttpRequest() =>
+    domCallConstructorString('XMLHttpRequest', <Object?>[])!
+        as DomXMLHttpRequest;
+
+Future<DomXMLHttpRequest> domHttpRequest(String url,
+    {String? responseType, String method = 'GET', dynamic sendData}) {
+  final Completer<DomXMLHttpRequest> completer = Completer<DomXMLHttpRequest>();
+  final DomXMLHttpRequest xhr = createDomXMLHttpRequest();
+  xhr.open(method, url, /* async */ true);
+  if (responseType != null) {
+    xhr.responseType = responseType;
+  }
+
+  xhr.addEventListener('load', allowInterop((DomEvent e) {
+    final int status = xhr.status!;
+    final bool accepted = status >= 200 && status < 300;
+    final bool fileUri = status == 0;
+    final bool notModified = status == 304;
+    final bool unknownRedirect = status > 307 && status < 400;
+    if (accepted || fileUri || notModified || unknownRedirect) {
+      completer.complete(xhr);
+    } else {
+      completer.completeError(e);
+    }
+  }));
+
+  xhr.addEventListener('error', allowInterop(completer.completeError));
+  xhr.send(sendData);
+  return completer.future;
+}
+
+extension DomXMLHttpRequestExtension on DomXMLHttpRequest {
+  external dynamic get response;
+  external String? get responseText;
+  external String get responseType;
+  external int? get status;
+  external set responseType(String value);
+  void open(String method, String url, [bool? async]) => js_util.callMethod(
+      this, 'open', <Object>[method, url, if (async != null) async]);
+  void send([Object? bodyOrData]) => js_util
+      .callMethod(this, 'send', <Object>[if (bodyOrData != null) bodyOrData]);
+}
+
+@JS()
+@staticInterop
 class DomXMLHttpRequestEventTarget extends DomEventTarget {}
+
 
 Future<_DomResponse> _rawHttpGet(String url) =>
     js_util.promiseToFuture<_DomResponse>(domWindow._fetch1(url.toJS));

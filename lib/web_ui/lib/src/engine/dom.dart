@@ -1399,6 +1399,9 @@ String? domGetConstructorName(Object o) {
   return js_util.getProperty(constructor, 'name')?.toString();
 }
 
+Object? domGetConstructor(String constructorName) =>
+    js_util.getProperty(domWindow, constructorName);
+
 @JS()
 @staticInterop
 class DomXMLHttpRequest extends DomXMLHttpRequestEventTarget {}

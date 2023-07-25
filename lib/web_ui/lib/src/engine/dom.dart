@@ -1391,14 +1391,6 @@ extension DomCanvasGradientExtension on DomCanvasGradient {
       _addColorStop(offset.toJS, color.toJS);
 }
 
-String? domGetConstructorName(Object o) {
-  final Object? constructor = js_util.getProperty(o, 'constructor');
-  if (constructor == null) {
-    return '';
-  }
-  return js_util.getProperty(constructor, 'name')?.toString();
-}
-
 @JS()
 @staticInterop
 class DomXMLHttpRequest extends DomXMLHttpRequestEventTarget {}

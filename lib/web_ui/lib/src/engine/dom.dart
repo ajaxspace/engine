@@ -1427,7 +1427,7 @@ Future<DomXMLHttpRequest> domHttpRequest(String url,
     xhr.responseType = responseType;
   }
 
-  xhr.addEventListener('load', allowInterop((DomEvent e) {
+  xhr.addEventListener('load', allowInterop(() {
     final int status = xhr.status!;
     final bool accepted = status >= 200 && status < 300;
     final bool fileUri = status == 0;
@@ -1440,7 +1440,9 @@ Future<DomXMLHttpRequest> domHttpRequest(String url,
     }
   }));
 
-  xhr.addEventListener('error', allowInterop(completer.completeError));
+  xhr.addEventListener('error', allowInterop() {
+    completer.completeError();
+  });
   xhr.send(sendData);
   return completer.future;
 }

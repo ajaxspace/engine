@@ -1403,6 +1403,14 @@ String? domGetConstructorName(Object o) {
 @staticInterop
 class DomXMLHttpRequest extends DomXMLHttpRequestEventTarget {}
 
+Object? domCallConstructorString(String constructorName, List<Object?> args) {
+  final Object? constructor = domGetConstructor(constructorName);
+  if (constructor == null) {
+    return null;
+  }
+  return js_util.callConstructor(constructor, args);
+}
+
 DomXMLHttpRequest createDomXMLHttpRequest() =>
     domCallConstructorString('XMLHttpRequest', <Object?>[])!
         as DomXMLHttpRequest;

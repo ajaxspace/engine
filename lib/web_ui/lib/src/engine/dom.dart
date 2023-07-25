@@ -1436,12 +1436,12 @@ Future<DomXMLHttpRequest> domHttpRequest(String url,
     if (accepted || fileUri || notModified || unknownRedirect) {
       completer.complete(xhr);
     } else {
-      completer.completeError(e);
+      completer.completeError(1);
     }
   }));
 
   xhr.addEventListener('error', allowInterop() {
-    completer.completeError();
+    completer.completeError(1);
   });
   xhr.send(sendData);
   return completer.future;

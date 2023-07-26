@@ -1428,21 +1428,32 @@ Future<DomXMLHttpRequest> domHttpRequest(String url,
   }
 
   xhr.addEventListener('load', allowInterop((DomEvent e) {
-    final int status = xhr.status!;
-    final bool accepted = status >= 200 && status < 300;
-    final bool fileUri = status == 0;
-    final bool notModified = status == 304;
-    final bool unknownRedirect = status > 307 && status < 400;
-    if (accepted || fileUri || notModified || unknownRedirect) {
-      completer.complete(xhr);
-    } else {
-      completer.completeError(1);
-    }
+    // final int status = xhr.status!;
+    // final bool accepted = status >= 200 && status < 300;
+    // final bool fileUri = status == 0;
+    // final bool notModified = status == 304;
+    // final bool unknownRedirect = status > 307 && status < 400;
+    // if (accepted || fileUri || notModified || unknownRedirect) {
+    //   completer.complete(xhr);
+    // } else {
+    //   completer.completeError(e);
+    // }
   }));
 
-  xhr.addEventListener('error', allowInterop((dynamic e) {
-    completer.completeError(1);
+  xhr.addEventListener('load', allowInterop(() {
+    // final int status = xhr.status!;
+    // final bool accepted = status >= 200 && status < 300;
+    // final bool fileUri = status == 0;
+    // final bool notModified = status == 304;
+    // final bool unknownRedirect = status > 307 && status < 400;
+    // if (accepted || fileUri || notModified || unknownRedirect) {
+    //   completer.complete(xhr);
+    // } else {
+    //   completer.completeError(e);
+    // }
   }));
+
+  xhr.addEventListener('error', allowInterop(completer.completeError));
   xhr.send(sendData);
   return completer.future;
 }

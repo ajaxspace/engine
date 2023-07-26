@@ -93,9 +93,14 @@ class AssetManager {
   }
 
   /// Loads an asset and returns the server response.
-  Future<HttpFetchResponse> loadAsset(String asset) {
+  // Future<HttpFetchResponse> loadAsset(String asset) {
+  //   print('AZAZAZAZAZ Calling AssetManager.loadAsset');
+  //   return httpFetch(getAssetUrl(asset));
+  // }
+
+  Future<ByteData> loadAsset(String asset) {
     print('AZAZAZAZAZ Calling AssetManager.loadAsset');
-    return httpFetch(getAssetUrl(asset));
+    return load(asset);
   }
 
   /// Loads an asset using an [DomXMLHttpRequest] and returns data as [ByteData].

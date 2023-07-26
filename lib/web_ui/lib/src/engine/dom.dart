@@ -1600,41 +1600,38 @@ extension HttpFetchResponseExtension on HttpFetchResponse {
 }
 
 class HttpFetchResponseImpl implements HttpFetchResponse {
-  HttpFetchResponseImpl._(this.url, this._domResponse);
-
-  @override
-  final String url;
-
-  final _DomResponse _domResponse;
-
-  @override
-  int get status => _domResponse.status;
-
-  @override
-  int? get contentLength {
-    final String? header = _domResponse.headers.get('Content-Length');
-    if (header == null) {
-      return null;
-    }
-    return int.tryParse(header);
+  factory HttpFetchResponseImpl.fromByteData(ByteData byteData, String url) {
+    return HttpFetchResponseImpl._(
+      byteData.lengthInBytes,
+      byteData.lengthInBytes > 0,
+      HttpFetchPayloadImpl2(byteData),
+      0,
+      url,
+    );
   }
 
-  @override
-  bool get hasPayload {
-    final bool accepted = status >= 200 && status < 300;
-    final bool fileUri = status == 0;
-    final bool notModified = status == 304;
-    final bool unknownRedirect = status > 307 && status < 400;
-    return accepted || fileUri || notModified || unknownRedirect;
-  }
+  HttpFetchResponseImpl._(
+    this.contentLength,
+    this.hasPayload,
+    this.payload,
+    this.status,
+    this.url,
+  );
 
   @override
-  HttpFetchPayload get payload {
-    if (!hasPayload) {
-      throw HttpFetchNoPayloadError(url, status: status);
-    }
-    return HttpFetchPayloadImpl._(_domResponse);
-  }
+  int? contentLength;
+
+  @override
+  bool hasPayload;
+
+  @override
+  HttpFetchPayload payload;
+
+  @override
+  int status;
+
+  @override
+  String url;
 }
 
 /// A fake implementation of [HttpFetchResponse] for testing.
@@ -1684,39 +1681,33 @@ abstract class HttpFetchPayload {
   Future<String> text();
 }
 
-class HttpFetchPayloadImpl implements HttpFetchPayload {
-  HttpFetchPayloadImpl._(this._domResponse);
+class HttpFetchPayloadImpl extends HttpFetchPayload {
+  HttpFetchPayloadImpl(this.byteData);
 
-  final _DomResponse _domResponse;
+  final ByteData byteData;
 
   @override
-  Future<void> read<T>(HttpFetchReader<T> callback) async {
-    final _DomReadableStream stream = _domResponse.body;
-    final _DomStreamReader reader = stream.getReader();
-
-    while (true) {
-      final _DomStreamChunk chunk = await reader.read();
-      if (chunk.done) {
-        break;
-      }
-      callback(chunk.value as T);
-    }
+  Future<ByteBuffer> asByteBuffer() {
+    return Future.value(byteData.buffer);
   }
 
-  /// Returns the data as a [ByteBuffer].
   @override
-  Future<ByteBuffer> asByteBuffer() async {
-    return (await _domResponse.arrayBuffer())! as ByteBuffer;
+  Future json() {
+    return Future.value(convert.json
+        .decode(convert.utf8.decode(byteData.buffer.asUint8List())));
   }
 
-  /// Returns the data parsed as JSON.
   @override
-  Future<dynamic> json() => _domResponse.json();
+  Future<void> read<T>(reader) {
+    throw 'AZAZA NOT IMPLEMENTED READ';
+  }
 
-  /// Return the data as a string.
   @override
-  Future<String> text() => _domResponse.text();
+  Future<String> text() {
+    return Future.value(String.fromCharCodes(byteData.buffer.asUint8List()));
+  }
 }
+
 
 typedef MockOnRead = Future<void> Function<T>(HttpFetchReader<T> callback);
 

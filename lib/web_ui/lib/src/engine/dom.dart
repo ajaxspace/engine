@@ -365,9 +365,7 @@ extension DomEventTargetExtension on DomEventTarget {
 
 typedef DartDomEventListener = JSVoid Function(DomEvent event);
 
-@JS()
-@staticInterop
-class DomEventListener {}
+typedef DomEventListener = void Function(DomEvent event);
 
 DomEventListener createDomEventListener(DartDomEventListener listener) =>
     listener.toJS as DomEventListener;
@@ -1428,29 +1426,16 @@ Future<DomXMLHttpRequest> domHttpRequest(String url,
   }
 
   xhr.addEventListener('load', allowInterop((DomEvent e) {
-    // final int status = xhr.status!;
-    // final bool accepted = status >= 200 && status < 300;
-    // final bool fileUri = status == 0;
-    // final bool notModified = status == 304;
-    // final bool unknownRedirect = status > 307 && status < 400;
-    // if (accepted || fileUri || notModified || unknownRedirect) {
-    //   completer.complete(xhr);
-    // } else {
-    //   completer.completeError(e);
-    // }
-  }));
-
-  xhr.addEventListener('load', allowInterop(() {
-    // final int status = xhr.status!;
-    // final bool accepted = status >= 200 && status < 300;
-    // final bool fileUri = status == 0;
-    // final bool notModified = status == 304;
-    // final bool unknownRedirect = status > 307 && status < 400;
-    // if (accepted || fileUri || notModified || unknownRedirect) {
-    //   completer.complete(xhr);
-    // } else {
-    //   completer.completeError(e);
-    // }
+    final int status = xhr.status!;
+    final bool accepted = status >= 200 && status < 300;
+    final bool fileUri = status == 0;
+    final bool notModified = status == 304;
+    final bool unknownRedirect = status > 307 && status < 400;
+    if (accepted || fileUri || notModified || unknownRedirect) {
+      completer.complete(xhr);
+    } else {
+      completer.completeError(e);
+    }
   }));
 
   xhr.addEventListener('error', allowInterop(completer.completeError));

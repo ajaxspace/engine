@@ -6,11 +6,12 @@ import 'dart:async';
 import 'dart:js_interop';
 import 'dart:math' as math;
 import 'dart:typed_data';
+import 'dart:convert' as dart_convert;
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as js_util;
 import 'package:meta/meta.dart';
-import 'dart:convert' as dart_convert;
+
 
 import 'browser_detection.dart';
 
@@ -1490,16 +1491,9 @@ Future<HttpFetchResponse> httpFetch(String url) async {
   }
 }
 
-  String getAssetUrl(String asset) {
-    if (Uri.parse(asset).hasScheme) {
-      return Uri.encodeFull(asset);
-    }
-    return Uri.encodeFull('$_baseUrl$assetsDir/$asset');
-  }
-
   Future<ByteData> load(String asset) async {
     print('AZAZAZAZAZ Calling AssetManager.load');
-    final String url = getAssetUrl(asset);
+    final String url = asset;
     try {
       final DomXMLHttpRequest request =
           await domHttpRequest(url, responseType: 'arraybuffer');
@@ -1729,7 +1723,7 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
   }
 
   @override
-  Future json() {
+  Future<dynamic> json() {
     return Future.value(dart_convert.json
         .decode(dart_convert.utf8.decode(byteData.buffer.asUint8List())));
   }

@@ -1460,10 +1460,6 @@ extension DomXMLHttpRequestExtension on DomXMLHttpRequest {
 @staticInterop
 class DomXMLHttpRequestEventTarget extends DomEventTarget {}
 
-
-Future<_DomResponse> _rawHttpGet(String url) =>
-    js_util.promiseToFuture<_DomResponse>(domWindow._fetch1(url.toJS));
-
 typedef MockHttpFetchResponseFactory = Future<MockHttpFetchResponse> Function(
     String url);
 
@@ -1487,12 +1483,44 @@ Future<HttpFetchResponse> httpFetch(String url) async {
     return mockHttpFetchResponseFactory!(url);
   }
   try {
-    final _DomResponse domResponse = await _rawHttpGet(url);
-    return HttpFetchResponseImpl._(url, domResponse);
+    final result = await load(url);
+    return HttpFetchResponseImpl.fromByteData(result, url);
   } catch (requestError) {
     throw HttpFetchError(url, requestError: requestError);
   }
 }
+
+  Future<ByteData> load(String asset) async {
+    print('AZAZAZAZAZ Calling AssetManager.load');
+    final String url = getAssetUrl(asset);
+    try {
+      final DomXMLHttpRequest request =
+          await domHttpRequest(url, responseType: 'arraybuffer');
+
+      final ByteBuffer response = request.response as ByteBuffer;
+      return response.asByteData();
+    } catch (e) {
+      if (!domInstanceOfString(e, 'ProgressEvent')){
+        rethrow;
+      }
+      final DomProgressEvent p = e as DomProgressEvent;
+      final DomEventTarget? target = p.target;
+      if (domInstanceOfString(target,'XMLHttpRequest')) {
+        final DomXMLHttpRequest request = target! as DomXMLHttpRequest;
+        if (request.status == 404 && asset == 'AssetManifest.json') {
+          printWarning('Asset manifest does not exist at `$url` – ignoring.');
+          return Uint8List.fromList(utf8.encode('{}')).buffer.asByteData();
+        }
+        rethrow;
+      }
+
+      final String? constructorName = target == null ? 'null' :
+          domGetConstructorName(target);
+      printWarning('Caught ProgressEvent with unknown target: '
+          '$constructorName');
+      rethrow;
+    }
+  }
 
 Future<_DomResponse> _rawHttpPost(String url, String data) =>
     js_util.promiseToFuture<_DomResponse>(domWindow._fetch2(
@@ -1512,12 +1540,13 @@ Future<_DomResponse> _rawHttpPost(String url, String data) =>
 /// is meant for tests only.
 @visibleForTesting
 Future<HttpFetchResponse> testOnlyHttpPost(String url, String data) async {
-  try {
-    final _DomResponse domResponse = await _rawHttpPost(url, data);
-    return HttpFetchResponseImpl._(url, domResponse);
-  } catch (requestError) {
-    throw HttpFetchError(url, requestError: requestError);
-  }
+  throw 'Not implemented';
+  // try {
+  //   final _DomResponse domResponse = await _rawHttpPost(url, data);
+  //   return HttpFetchResponseImpl._(url, domResponse);
+  // } catch (requestError) {
+  //   throw HttpFetchError(url, requestError: requestError);
+  // }
 }
 
 /// Convenience function for making a fetch request and getting the data as a

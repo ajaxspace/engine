@@ -1706,7 +1706,7 @@ abstract class HttpFetchPayload {
   Future<ByteBuffer> asByteBuffer();
 
   /// Returns the data parsed as JSON.
-  Future<dynamic> json();
+  Future<dynamic> toJson();
 
   /// Return the data as a string.
   Future<String> text();
@@ -1764,7 +1764,7 @@ class MockHttpFetchPayload implements HttpFetchPayload {
   Future<ByteBuffer> asByteBuffer() async => _byteBuffer!;
 
   @override
-  Future<dynamic> json() async => _json!;
+  Future<dynamic> toJson() async => _json!;
 
   @override
   Future<String> text() async => _text!;

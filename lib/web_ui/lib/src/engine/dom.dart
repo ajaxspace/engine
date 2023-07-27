@@ -10,6 +10,7 @@ import 'dart:typed_data';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as js_util;
 import 'package:meta/meta.dart';
+import 'dart:convert' as convert;
 
 import 'browser_detection.dart';
 
@@ -1604,7 +1605,7 @@ class HttpFetchResponseImpl implements HttpFetchResponse {
     return HttpFetchResponseImpl._(
       byteData.lengthInBytes,
       byteData.lengthInBytes > 0,
-      HttpFetchPayloadImpl2(byteData),
+      HttpFetchPayloadImpl(byteData),
       0,
       url,
     );

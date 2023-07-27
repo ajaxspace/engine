@@ -98,7 +98,7 @@ class AssetManager {
   //   return httpFetch(getAssetUrl(asset));
   // }
 
-  Future<ByteData> loadAsset(String asset) {
+  Future<HttpFetchResponse> loadAsset(String asset) {
     print('AZAZAZAZAZ Calling AssetManager.loadAsset');
     return load(asset);
   }

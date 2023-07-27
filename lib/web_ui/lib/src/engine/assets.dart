@@ -85,11 +85,11 @@ class AssetManager {
   /// request "assets/hello world.png", and the request will 404. Therefore, we
   /// must URL-encode the asset key *again* so when it is decoded, it is
   /// requesting the once-URL-encoded asset key.
-  String getAssetUrl(String asset) {
-    if (Uri.parse(asset).hasScheme) {
-      return Uri.encodeFull(asset);
-    }
-    return Uri.encodeFull('$_baseUrl$assetsDir/$asset');
+  Future<HttpFetchResponse> loadAsset(String asset) async {
+    print('AZAZAZAZAZ Calling AssetManager.loadAsset');
+    final result = await load(asset);
+
+    return HttpFetchResponseImpl.fromByteData(result, asset);
   }
 
   /// Loads an asset and returns the server response.
@@ -100,14 +100,33 @@ class AssetManager {
   /// Loads an asset using an [DomXMLHttpRequest] and returns data as [ByteData].
   Future<ByteData> load(String asset) async {
     final String url = getAssetUrl(asset);
-    final HttpFetchResponse response = await httpFetch(url);
+    try {
+      final DomXMLHttpRequest request =
+          await domHttpRequest(url, responseType: 'arraybuffer');
 
-    if (response.status == 404 && asset == 'AssetManifest.json') {
-      printWarning('Asset manifest does not exist at `$url` - ignoring.');
-      return Uint8List.fromList(utf8.encode('{}')).buffer.asByteData();
+      final ByteBuffer response = request.response as ByteBuffer;
+      return response.asByteData();
+    } catch (e) {
+      if (!domInstanceOfString(e, 'ProgressEvent')) {
+        rethrow;
+      }
+      final DomProgressEvent p = e as DomProgressEvent;
+      final DomEventTarget? target = p.target;
+      if (domInstanceOfString(target, 'XMLHttpRequest')) {
+        final DomXMLHttpRequest request = target! as DomXMLHttpRequest;
+        if (request.status == 404 && asset == 'AssetManifest.json') {
+          printWarning('Asset manifest does not exist at `$url` – ignoring.');
+          return Uint8List.fromList(utf8.encode('{}')).buffer.asByteData();
+        }
+        rethrow;
+      }
+
+      final String? constructorName =
+          target == null ? 'null' : domGetConstructorName(target);
+      printWarning('Caught ProgressEvent with unknown target: '
+          '$constructorName');
+      rethrow;
     }
-
-    return (await response.payload.asByteBuffer()).asByteData();
   }
 }
 

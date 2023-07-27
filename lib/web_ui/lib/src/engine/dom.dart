@@ -10,7 +10,7 @@ import 'dart:typed_data';
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as js_util;
 import 'package:meta/meta.dart';
-import 'dart:convert' as convert;
+import 'dart:convert' as dart_convert;
 
 import 'browser_detection.dart';
 
@@ -1490,6 +1490,13 @@ Future<HttpFetchResponse> httpFetch(String url) async {
   }
 }
 
+  String getAssetUrl(String asset) {
+    if (Uri.parse(asset).hasScheme) {
+      return Uri.encodeFull(asset);
+    }
+    return Uri.encodeFull('$_baseUrl$assetsDir/$asset');
+  }
+
   Future<ByteData> load(String asset) async {
     print('AZAZAZAZAZ Calling AssetManager.load');
     final String url = getAssetUrl(asset);
@@ -1723,8 +1730,8 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
 
   @override
   Future json() {
-    return Future.value(convert.json
-        .decode(convert.utf8.decode(byteData.buffer.asUint8List())));
+    return Future.value(dart_convert.json
+        .decode(dart_convert.utf8.decode(byteData.buffer.asUint8List())));
   }
 
   @override

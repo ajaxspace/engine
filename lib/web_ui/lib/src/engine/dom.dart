@@ -1621,7 +1621,7 @@ extension HttpFetchResponseExtension on HttpFetchResponse {
 
   /// Returns the data parsed as JSON.
   Future<dynamic> json() {
-    return payload.json();
+    return payload.toJson();
   }
 
   /// Return the data as a string.
@@ -1723,7 +1723,7 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
   }
 
   @override
-  Future<dynamic> json() {
+  Future<dynamic> toJson() {
     return Future.value(json.decode(utf8.decode(byteData.buffer.asUint8List())));
   }
 

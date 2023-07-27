@@ -6,7 +6,7 @@ import 'dart:async';
 import 'dart:js_interop';
 import 'dart:math' as math;
 import 'dart:typed_data';
-import 'dart:convert' as dart_convert;
+import 'dart:convert';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as js_util;
@@ -1724,8 +1724,7 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
 
   @override
   Future<dynamic> json() {
-    return Future.value(dart_convert.json
-        .decode(dart_convert.utf8.decode(byteData.buffer.asUint8List())));
+    return Future.value(json.decode(utf8.decode(byteData.buffer.asUint8List())));
   }
 
   @override

@@ -92,9 +92,11 @@ class AssetManager {
     return HttpFetchResponseImpl.fromByteData(result, asset);
   }
 
-  /// Loads an asset and returns the server response.
-  Future<HttpFetchResponse> loadAsset(String asset) {
-    return httpFetch(getAssetUrl(asset));
+  String getAssetUrl(String asset) {
+    if (Uri.parse(asset).hasScheme) {
+      return Uri.encodeFull(asset);
+    }
+    return Uri.encodeFull('$_baseUrl$assetsDir/$asset');
   }
 
   /// Loads an asset using an [DomXMLHttpRequest] and returns data as [ByteData].

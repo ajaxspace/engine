@@ -3,10 +3,10 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:js_interop';
 import 'dart:math' as math;
 import 'dart:typed_data';
-import 'dart:convert';
 
 import 'package:js/js.dart';
 import 'package:js/js_util.dart' as js_util;
@@ -122,8 +122,7 @@ extension DomWindowExtension on DomWindow {
   @JS('getComputedStyle')
   external DomCSSStyleDeclaration _getComputedStyle1(DomElement elt);
   @JS('getComputedStyle')
-  external DomCSSStyleDeclaration _getComputedStyle2(
-      DomElement elt, JSString pseudoElt);
+  external DomCSSStyleDeclaration _getComputedStyle2(DomElement elt, JSString pseudoElt);
   DomCSSStyleDeclaration getComputedStyle(DomElement elt, [String? pseudoElt]) {
     if (pseudoElt == null) {
       return _getComputedStyle1(elt);
@@ -142,10 +141,8 @@ extension DomWindowExtension on DomWindow {
   @JS('postMessage')
   external JSVoid _postMessage1(JSAny message, JSString targetOrigin);
   @JS('postMessage')
-  external JSVoid _postMessage2(
-      JSAny message, JSString targetOrigin, JSArray messagePorts);
-  void postMessage(Object message, String targetOrigin,
-      [List<DomMessagePort>? messagePorts]) {
+  external JSVoid _postMessage2(JSAny message, JSString targetOrigin, JSArray messagePorts);
+  void postMessage(Object message, String targetOrigin, [List<DomMessagePort>? messagePorts]) {
     if (messagePorts == null) {
       _postMessage1(message.toJSAnyShallow, targetOrigin.toJS);
     } else {
@@ -221,9 +218,8 @@ extension DomNavigatorExtension on DomNavigator {
 
   @JS('languages')
   external JSArray? get _languages;
-  List<String>? get languages => _languages?.toDart
-      .map<String>((JSAny? any) => (any! as JSString).toDart)
-      .toList();
+  List<String>? get languages =>
+      _languages?.toDart.map<String>((JSAny? any) => (any! as JSString).toDart).toList();
 }
 
 @JS()
@@ -261,8 +257,7 @@ extension DomDocumentExtension on DomDocument {
   external DomHTMLScriptElement? get currentScript;
 
   @JS('createElementNS')
-  external DomElement _createElementNS(
-      JSString namespaceURI, JSString qualifiedName);
+  external DomElement _createElementNS(JSString namespaceURI, JSString qualifiedName);
   DomElement createElementNS(String namespaceURI, String qualifiedName) =>
       _createElementNS(namespaceURI.toJS, qualifiedName.toJS);
 
@@ -278,8 +273,7 @@ extension DomDocumentExtension on DomDocument {
 
   @JS('elementFromPoint')
   external DomElement? _elementFromPoint(JSNumber x, JSNumber y);
-  DomElement? elementFromPoint(int x, int y) =>
-      _elementFromPoint(x.toJS, y.toJS);
+  DomElement? elementFromPoint(int x, int y) => _elementFromPoint(x.toJS, y.toJS);
 }
 
 @JS()
@@ -324,8 +318,7 @@ extension DomEventTargetExtension on DomEventTarget {
   @JS('addEventListener')
   external JSVoid _addEventListener2(
       JSString type, DomEventListener listener, JSBoolean useCapture);
-  void addEventListener(String type, DomEventListener? listener,
-      [bool? useCapture]) {
+  void addEventListener(String type, DomEventListener? listener, [bool? useCapture]) {
     if (listener != null) {
       if (useCapture == null) {
         _addEventListener1(type.toJS, listener);
@@ -336,20 +329,17 @@ extension DomEventTargetExtension on DomEventTarget {
   }
 
   @JS('addEventListener')
-  external JSVoid _addEventListener3(
-      JSString type, DomEventListener listener, JSAny options);
-  void addEventListenerWithOptions(String type, DomEventListener listener,
-          Map<String, Object> options) =>
+  external JSVoid _addEventListener3(JSString type, DomEventListener listener, JSAny options);
+  void addEventListenerWithOptions(
+          String type, DomEventListener listener, Map<String, Object> options) =>
       _addEventListener3(type.toJS, listener, options.toJSAnyDeep);
 
   @JS('removeEventListener')
-  external JSVoid _removeEventListener1(
-      JSString type, DomEventListener listener);
+  external JSVoid _removeEventListener1(JSString type, DomEventListener listener);
   @JS('removeEventListener')
   external JSVoid _removeEventListener2(
       JSString type, DomEventListener listener, JSBoolean useCapture);
-  void removeEventListener(String type, DomEventListener? listener,
-      [bool? useCapture]) {
+  void removeEventListener(String type, DomEventListener? listener, [bool? useCapture]) {
     if (listener != null) {
       if (useCapture == null) {
         _removeEventListener1(type.toJS, listener);
@@ -394,8 +384,7 @@ extension DomEventExtension on DomEvent {
   @JS('initEvent')
   external JSVoid _initEvent2(JSString type, JSBoolean bubbles);
   @JS('initEvent')
-  external JSVoid _initEvent3(
-      JSString type, JSBoolean bubbles, JSBoolean cancelable);
+  external JSVoid _initEvent3(JSString type, JSBoolean bubbles, JSBoolean cancelable);
   void initEvent(String type, [bool? bubbles, bool? cancelable]) {
     if (bubbles == null) {
       _initEvent1(type.toJS);
@@ -496,8 +485,7 @@ extension DomNodeExtension on DomNode {
 
   @JS('childNodes')
   external _DomList get _childNodes;
-  Iterable<DomNode> get childNodes =>
-      createDomListWrapper<DomElement>(_childNodes);
+  Iterable<DomNode> get childNodes => createDomListWrapper<DomElement>(_childNodes);
 
   external DomDocument? get ownerDocument;
   void clearChildren() {
@@ -516,8 +504,7 @@ DomElement createDomElement(String tag) => domDocument.createElement(tag);
 extension DomElementExtension on DomElement {
   @JS('children')
   external _DomList get _children;
-  Iterable<DomElement> get children =>
-      createDomListWrapper<DomElement>(_children);
+  Iterable<DomElement> get children => createDomListWrapper<DomElement>(_children);
 
   @JS('clientHeight')
   external JSNumber get _clientHeight;
@@ -556,8 +543,7 @@ extension DomElementExtension on DomElement {
 
   @JS('getAttribute')
   external JSString? _getAttribute(JSString attributeName);
-  String? getAttribute(String attributeName) =>
-      _getAttribute(attributeName.toJS)?.toDart;
+  String? getAttribute(String attributeName) => _getAttribute(attributeName.toJS)?.toDart;
 
   external DomRect getBoundingClientRect();
   external JSVoid prepend(DomNode node);
@@ -575,8 +561,7 @@ extension DomElementExtension on DomElement {
 
   @JS('setAttribute')
   external JSVoid _setAttribute(JSString name, JSAny value);
-  JSVoid setAttribute(String name, Object value) =>
-      _setAttribute(name.toJS, value.toJSAnyDeep);
+  JSVoid setAttribute(String name, Object value) => _setAttribute(name.toJS, value.toJSAnyDeep);
 
   void appendText(String text) => append(createDomText(text));
 
@@ -640,13 +625,11 @@ extension DomElementExtension on DomElement {
 
   @JS('childNodes')
   external _DomList get _childNodes;
-  Iterable<DomNode> get childNodes =>
-      createDomListWrapper<DomElement>(_childNodes);
+  Iterable<DomNode> get childNodes => createDomListWrapper<DomElement>(_childNodes);
 
   @JS('attachShadow')
   external DomShadowRoot _attachShadow(JSAny initDict);
-  DomShadowRoot attachShadow(Map<Object?, Object?> initDict) =>
-      _attachShadow(initDict.toJSAnyDeep);
+  DomShadowRoot attachShadow(Map<Object?, Object?> initDict) => _attachShadow(initDict.toJSAnyDeep);
 
   external DomShadowRoot? get shadowRoot;
   void clearChildren() {
@@ -690,23 +673,16 @@ extension DomCSSStyleDeclarationExtension on DomCSSStyleDeclaration {
   set wordSpacing(String value) => setProperty('word-spacing', value);
   set textShadow(String value) => setProperty('text-shadow', value);
   set textDecoration(String value) => setProperty('text-decoration', value);
-  set textDecorationColor(String value) =>
-      setProperty('text-decoration-color', value);
-  set fontFeatureSettings(String value) =>
-      setProperty('font-feature-settings', value);
-  set fontVariationSettings(String value) =>
-      setProperty('font-variation-settings', value);
+  set textDecorationColor(String value) => setProperty('text-decoration-color', value);
+  set fontFeatureSettings(String value) => setProperty('font-feature-settings', value);
+  set fontVariationSettings(String value) => setProperty('font-variation-settings', value);
   set visibility(String value) => setProperty('visibility', value);
   set overflow(String value) => setProperty('overflow', value);
   set boxShadow(String value) => setProperty('box-shadow', value);
-  set borderTopLeftRadius(String value) =>
-      setProperty('border-top-left-radius', value);
-  set borderTopRightRadius(String value) =>
-      setProperty('border-top-right-radius', value);
-  set borderBottomLeftRadius(String value) =>
-      setProperty('border-bottom-left-radius', value);
-  set borderBottomRightRadius(String value) =>
-      setProperty('border-bottom-right-radius', value);
+  set borderTopLeftRadius(String value) => setProperty('border-top-left-radius', value);
+  set borderTopRightRadius(String value) => setProperty('border-top-right-radius', value);
+  set borderBottomLeftRadius(String value) => setProperty('border-bottom-left-radius', value);
+  set borderBottomRightRadius(String value) => setProperty('border-bottom-right-radius', value);
   set borderRadius(String value) => setProperty('border-radius', value);
   set perspective(String value) => setProperty('perspective', value);
   set padding(String value) => setProperty('padding', value);
@@ -714,8 +690,7 @@ extension DomCSSStyleDeclarationExtension on DomCSSStyleDeclaration {
   set border(String value) => setProperty('border', value);
   set mixBlendMode(String value) => setProperty('mix-blend-mode', value);
   set backgroundSize(String value) => setProperty('background-size', value);
-  set backgroundBlendMode(String value) =>
-      setProperty('background-blend-mode', value);
+  set backgroundBlendMode(String value) => setProperty('background-blend-mode', value);
   set transformStyle(String value) => setProperty('transform-style', value);
   set display(String value) => setProperty('display', value);
   set flexDirection(String value) => setProperty('flex-direction', value);
@@ -760,18 +735,14 @@ extension DomCSSStyleDeclarationExtension on DomCSSStyleDeclaration {
   String get textShadow => getPropertyValue('text-shadow');
   String get textDecorationColor => getPropertyValue('text-decoration-color');
   String get fontFeatureSettings => getPropertyValue('font-feature-settings');
-  String get fontVariationSettings =>
-      getPropertyValue('font-variation-settings');
+  String get fontVariationSettings => getPropertyValue('font-variation-settings');
   String get visibility => getPropertyValue('visibility');
   String get overflow => getPropertyValue('overflow');
   String get boxShadow => getPropertyValue('box-shadow');
   String get borderTopLeftRadius => getPropertyValue('border-top-left-radius');
-  String get borderTopRightRadius =>
-      getPropertyValue('border-top-right-radius');
-  String get borderBottomLeftRadius =>
-      getPropertyValue('border-bottom-left-radius');
-  String get borderBottomRightRadius =>
-      getPropertyValue('border-bottom-right-radius');
+  String get borderTopRightRadius => getPropertyValue('border-top-right-radius');
+  String get borderBottomLeftRadius => getPropertyValue('border-bottom-left-radius');
+  String get borderBottomRightRadius => getPropertyValue('border-bottom-right-radius');
   String get borderRadius => getPropertyValue('border-radius');
   String get perspective => getPropertyValue('perspective');
   String get padding => getPropertyValue('padding');
@@ -797,12 +768,10 @@ extension DomCSSStyleDeclarationExtension on DomCSSStyleDeclaration {
 
   @JS('getPropertyValue')
   external JSString _getPropertyValue(JSString property);
-  String getPropertyValue(String property) =>
-      _getPropertyValue(property.toJS).toDart;
+  String getPropertyValue(String property) => _getPropertyValue(property.toJS).toDart;
 
   @JS('setProperty')
-  external JSVoid _setProperty(
-      JSString propertyName, JSString value, JSString priority);
+  external JSVoid _setProperty(JSString propertyName, JSString value, JSString priority);
   void setProperty(String propertyName, String value, [String? priority]) {
     priority ??= '';
     _setProperty(propertyName.toJS, value.toJS, priority.toJS);
@@ -810,8 +779,7 @@ extension DomCSSStyleDeclarationExtension on DomCSSStyleDeclaration {
 
   @JS('removeProperty')
   external JSString _removeProperty(JSString property);
-  String removeProperty(String property) =>
-      _removeProperty(property.toJS).toDart;
+  String removeProperty(String property) => _removeProperty(property.toJS).toDart;
 }
 
 @JS()
@@ -869,8 +837,7 @@ class DomHTMLBodyElement extends DomHTMLElement {}
 
 @JS()
 @staticInterop
-class DomHTMLImageElement extends DomHTMLElement
-    implements DomCanvasImageSource {}
+class DomHTMLImageElement extends DomHTMLElement implements DomCanvasImageSource {}
 
 DomHTMLImageElement createDomHTMLImageElement() =>
     domDocument.createElement('img') as DomHTMLImageElement;
@@ -920,8 +887,7 @@ class DomHTMLScriptElement extends DomHTMLElement {}
 extension DomHTMLScriptElementExtension on DomHTMLScriptElement {
   @JS('src')
   external set _src(JSAny value);
-  set src(Object /* String|TrustedScriptURL */ value) =>
-      _src = value.toJSAnyShallow;
+  set src(Object /* String|TrustedScriptURL */ value) => _src = value.toJSAnyShallow;
 }
 
 DomHTMLScriptElement createDomHTMLScriptElement() =>
@@ -982,8 +948,7 @@ extension DomPerformanceExtension on DomPerformance {
   @JS('measure')
   external DomPerformanceMeasure? _measure(
       JSString measureName, JSString? startMark, JSString? endMark);
-  DomPerformanceMeasure? measure(
-          String measureName, String? startMark, String? endMark) =>
+  DomPerformanceMeasure? measure(String measureName, String? startMark, String? endMark) =>
       _measure(measureName.toJS, startMark?.toJS, endMark?.toJS);
 
   @JS('now')
@@ -1013,8 +978,7 @@ void debugResetCanvasCount() {
 
 DomCanvasElement createDomCanvasElement({int? width, int? height}) {
   debugCanvasCount++;
-  final DomCanvasElement canvas =
-      domWindow.document.createElement('canvas') as DomCanvasElement;
+  final DomCanvasElement canvas = domWindow.document.createElement('canvas') as DomCanvasElement;
   if (width != null) {
     canvas.width = width.toDouble();
   }
@@ -1061,8 +1025,7 @@ extension DomCanvasElementExtension on DomCanvasElement {
     }
   }
 
-  DomCanvasRenderingContext2D get context2D =>
-      getContext('2d')! as DomCanvasRenderingContext2D;
+  DomCanvasRenderingContext2D get context2D => getContext('2d')! as DomCanvasRenderingContext2D;
 
   WebGLContext getGlContext(int majorVersion) {
     if (majorVersion == 1) {
@@ -1147,22 +1110,18 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
       _createLinearGradient(x0.toJS, y0.toJS, x1.toJS, y1.toJS);
 
   @JS('createPattern')
-  external DomCanvasPattern? _createPattern(
-      JSAny image, JSString reptitionType);
+  external DomCanvasPattern? _createPattern(JSAny image, JSString reptitionType);
   DomCanvasPattern? createPattern(Object image, String reptitionType) =>
       _createPattern(image.toJSAnyShallow, reptitionType.toJS);
 
   @JS('createRadialGradient')
-  external DomCanvasGradient _createRadialGradient(JSNumber x0, JSNumber y0,
-      JSNumber r0, JSNumber x1, JSNumber y1, JSNumber r1);
-  DomCanvasGradient createRadialGradient(
-          num x0, num y0, num r0, num x1, num y1, num r1) =>
-      _createRadialGradient(
-          x0.toJS, y0.toJS, r0.toJS, x1.toJS, y1.toJS, r1.toJS);
+  external DomCanvasGradient _createRadialGradient(
+      JSNumber x0, JSNumber y0, JSNumber r0, JSNumber x1, JSNumber y1, JSNumber r1);
+  DomCanvasGradient createRadialGradient(num x0, num y0, num r0, num x1, num y1, num r1) =>
+      _createRadialGradient(x0.toJS, y0.toJS, r0.toJS, x1.toJS, y1.toJS, r1.toJS);
 
   @JS('drawImage')
-  external JSVoid _drawImage(
-      DomCanvasImageSource source, JSNumber destX, JSNumber destY);
+  external JSVoid _drawImage(DomCanvasImageSource source, JSNumber destX, JSNumber destY);
   void drawImage(DomCanvasImageSource source, num destX, num destY) =>
       _drawImage(source, destX.toJS, destY.toJS);
 
@@ -1179,16 +1138,14 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   }
 
   @JS('fillRect')
-  external JSVoid _fillRect(
-      JSNumber x, JSNumber y, JSNumber width, JSNumber height);
+  external JSVoid _fillRect(JSNumber x, JSNumber y, JSNumber width, JSNumber height);
   void fillRect(num x, num y, num width, num height) =>
       _fillRect(x.toJS, y.toJS, width.toJS, height.toJS);
 
   @JS('fillText')
   external JSVoid _fillText1(JSString text, JSNumber x, JSNumber y);
   @JS('fillText')
-  external JSVoid _fillText2(
-      JSString text, JSNumber x, JSNumber y, JSNumber maxWidth);
+  external JSVoid _fillText2(JSString text, JSNumber x, JSNumber y, JSNumber maxWidth);
   void fillText(String text, num x, num y, [num? maxWidth]) {
     if (maxWidth == null) {
       _fillText1(text.toJS, x.toJS, y.toJS);
@@ -1198,8 +1155,7 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   }
 
   @JS('getImageData')
-  external DomImageData _getImageData(
-      JSNumber x, JSNumber y, JSNumber sw, JSNumber sh);
+  external DomImageData _getImageData(JSNumber x, JSNumber y, JSNumber sw, JSNumber sh);
   DomImageData getImageData(int x, int y, int sw, int sh) =>
       _getImageData(x.toJS, y.toJS, sw.toJS, sh.toJS);
 
@@ -1219,10 +1175,8 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   external JSVoid stroke();
 
   @JS('rect')
-  external JSVoid _rect(
-      JSNumber x, JSNumber y, JSNumber width, JSNumber height);
-  void rect(num x, num y, num width, num height) =>
-      _rect(x.toJS, y.toJS, width.toJS, height.toJS);
+  external JSVoid _rect(JSNumber x, JSNumber y, JSNumber width, JSNumber height);
+  void rect(num x, num y, num width, num height) => _rect(x.toJS, y.toJS, width.toJS, height.toJS);
 
   external JSVoid resetTransform();
   external JSVoid restore();
@@ -1256,8 +1210,7 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   void scale(num x, num y) => _scale(x.toJS, y.toJS);
 
   @JS('clearRect')
-  external JSVoid _clearRect(
-      JSNumber x, JSNumber y, JSNumber width, JSNumber height);
+  external JSVoid _clearRect(JSNumber x, JSNumber y, JSNumber width, JSNumber height);
   void clearRect(num x, num y, num width, num height) =>
       _clearRect(x.toJS, y.toJS, width.toJS, height.toJS);
 
@@ -1270,22 +1223,19 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   void rotate(num angle) => _rotate(angle.toJS);
 
   @JS('bezierCurveTo')
-  external JSVoid _bezierCurveTo(JSNumber cp1x, JSNumber cp1y, JSNumber cp2x,
-      JSNumber cp2y, JSNumber x, JSNumber y);
+  external JSVoid _bezierCurveTo(
+      JSNumber cp1x, JSNumber cp1y, JSNumber cp2x, JSNumber cp2y, JSNumber x, JSNumber y);
   void bezierCurveTo(num cp1x, num cp1y, num cp2x, num cp2y, num x, num y) =>
-      _bezierCurveTo(
-          cp1x.toJS, cp1y.toJS, cp2x.toJS, cp2y.toJS, x.toJS, y.toJS);
+      _bezierCurveTo(cp1x.toJS, cp1y.toJS, cp2x.toJS, cp2y.toJS, x.toJS, y.toJS);
 
   @JS('quadraticCurveTo')
-  external JSVoid _quadraticCurveTo(
-      JSNumber cpx, JSNumber cpy, JSNumber x, JSNumber y);
+  external JSVoid _quadraticCurveTo(JSNumber cpx, JSNumber cpy, JSNumber x, JSNumber y);
   void quadraticCurveTo(num cpx, num cpy, num x, num y) =>
       _quadraticCurveTo(cpx.toJS, cpy.toJS, x.toJS, y.toJS);
 
   @JS('globalCompositeOperation')
   external set _globalCompositeOperation(JSString value);
-  set globalCompositeOperation(String value) =>
-      _globalCompositeOperation = value.toJS;
+  set globalCompositeOperation(String value) => _globalCompositeOperation = value.toJS;
 
   @JS('lineCap')
   external set _lineCap(JSString value);
@@ -1300,12 +1250,10 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   set shadowBlur(num value) => _shadowBlur = value.toJS;
 
   @JS('arc')
-  external JSVoid _arc(JSNumber x, JSNumber y, JSNumber radius,
-      JSNumber startAngle, JSNumber endAngle, JSBoolean antiClockwise);
-  void arc(num x, num y, num radius, num startAngle, num endAngle,
-          [bool antiClockwise = false]) =>
-      _arc(x.toJS, y.toJS, radius.toJS, startAngle.toJS, endAngle.toJS,
-          antiClockwise.toJS);
+  external JSVoid _arc(JSNumber x, JSNumber y, JSNumber radius, JSNumber startAngle,
+      JSNumber endAngle, JSBoolean antiClockwise);
+  void arc(num x, num y, num radius, num startAngle, num endAngle, [bool antiClockwise = false]) =>
+      _arc(x.toJS, y.toJS, radius.toJS, startAngle.toJS, endAngle.toJS, antiClockwise.toJS);
 
   @JS('filter')
   external set _filter(JSString? value);
@@ -1324,24 +1272,16 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
   set shadowColor(String? value) => _shadowColor = value?.toJS;
 
   @JS('ellipse')
-  external JSVoid _ellipse(
-      JSNumber x,
-      JSNumber y,
-      JSNumber radiusX,
-      JSNumber radiusY,
-      JSNumber rotation,
-      JSNumber startAngle,
-      JSNumber endAngle,
-      JSBoolean? antiClockwise);
-  void ellipse(num x, num y, num radiusX, num radiusY, num rotation,
-          num startAngle, num endAngle, bool? antiClockwise) =>
-      _ellipse(x.toJS, y.toJS, radiusX.toJS, radiusY.toJS, rotation.toJS,
-          startAngle.toJS, endAngle.toJS, antiClockwise?.toJS);
+  external JSVoid _ellipse(JSNumber x, JSNumber y, JSNumber radiusX, JSNumber radiusY,
+      JSNumber rotation, JSNumber startAngle, JSNumber endAngle, JSBoolean? antiClockwise);
+  void ellipse(num x, num y, num radiusX, num radiusY, num rotation, num startAngle, num endAngle,
+          bool? antiClockwise) =>
+      _ellipse(x.toJS, y.toJS, radiusX.toJS, radiusY.toJS, rotation.toJS, startAngle.toJS,
+          endAngle.toJS, antiClockwise?.toJS);
 
   @JS('strokeText')
   external JSVoid _strokeText(JSString text, JSNumber x, JSNumber y);
-  void strokeText(String text, num x, num y) =>
-      _strokeText(text.toJS, x.toJS, y.toJS);
+  void strokeText(String text, num x, num y) => _strokeText(text.toJS, x.toJS, y.toJS);
 
   @JS('globalAlpha')
   external set _globalAlpha(JSNumber? value);
@@ -1352,8 +1292,7 @@ extension DomCanvasRenderingContext2DExtension on DomCanvasRenderingContext2D {
 @staticInterop
 class DomCanvasRenderingContextWebGl {}
 
-extension DomCanvasRenderingContextWebGlExtension
-    on DomCanvasRenderingContextWebGl {
+extension DomCanvasRenderingContextWebGlExtension on DomCanvasRenderingContextWebGl {
   @JS('isContextLost')
   external JSBoolean _isContextLost();
   bool isContextLost() => _isContextLost().toDart;
@@ -1385,8 +1324,7 @@ class DomCanvasGradient {}
 extension DomCanvasGradientExtension on DomCanvasGradient {
   @JS('addColorStop')
   external JSVoid _addColorStop(JSNumber offset, JSString color);
-  void addColorStop(num offset, String color) =>
-      _addColorStop(offset.toJS, color.toJS);
+  void addColorStop(num offset, String color) => _addColorStop(offset.toJS, color.toJS);
 }
 
 String? domGetConstructorName(Object o) {
@@ -1413,8 +1351,7 @@ Object? domCallConstructorString(String constructorName, List<Object?> args) {
 }
 
 DomXMLHttpRequest createDomXMLHttpRequest() =>
-    domCallConstructorString('XMLHttpRequest', <Object?>[])!
-        as DomXMLHttpRequest;
+    domCallConstructorString('XMLHttpRequest', <Object?>[])! as DomXMLHttpRequest;
 
 Future<DomXMLHttpRequest> domHttpRequest(String url,
     {String? responseType, String method = 'GET', dynamic sendData}) {
@@ -1449,18 +1386,17 @@ extension DomXMLHttpRequestExtension on DomXMLHttpRequest {
   external String get responseType;
   external int? get status;
   external set responseType(String value);
-  void open(String method, String url, [bool? async]) => js_util.callMethod(
-      this, 'open', <Object>[method, url, if (async != null) async]);
-  void send([Object? bodyOrData]) => js_util
-      .callMethod(this, 'send', <Object>[if (bodyOrData != null) bodyOrData]);
+  void open(String method, String url, [bool? async]) =>
+      js_util.callMethod(this, 'open', <Object>[method, url, if (async != null) async]);
+  void send([Object? bodyOrData]) =>
+      js_util.callMethod(this, 'send', <Object>[if (bodyOrData != null) bodyOrData]);
 }
 
 @JS()
 @staticInterop
 class DomXMLHttpRequestEventTarget extends DomEventTarget {}
 
-typedef MockHttpFetchResponseFactory = Future<MockHttpFetchResponse> Function(
-    String url);
+typedef MockHttpFetchResponseFactory = Future<MockHttpFetchResponse> Function(String url);
 
 MockHttpFetchResponseFactory? mockHttpFetchResponseFactory;
 
@@ -1482,7 +1418,7 @@ Future<HttpFetchResponse> httpFetch(String url) async {
     return mockHttpFetchResponseFactory!(url);
   }
   try {
-    final result = await load(url);
+    final ByteData result = await load(url);
     return HttpFetchResponseImpl.fromByteData(result, url);
   } catch (requestError) {
     throw HttpFetchError(url, requestError: requestError);
@@ -1493,8 +1429,7 @@ Future<ByteData> load(String asset) async {
   print('AZAZAZAZAZ Calling AssetManager.load');
   final String url = asset;
   try {
-    final DomXMLHttpRequest request =
-        await domHttpRequest(url, responseType: 'arraybuffer');
+    final DomXMLHttpRequest request = await domHttpRequest(url, responseType: 'arraybuffer');
 
     final ByteBuffer response = request.response as ByteBuffer;
     return response.asByteData();
@@ -1507,16 +1442,16 @@ Future<ByteData> load(String asset) async {
     if (domInstanceOfString(target, 'XMLHttpRequest')) {
       final DomXMLHttpRequest request = target! as DomXMLHttpRequest;
       if (request.status == 404 && asset == 'AssetManifest.json') {
-        printWarning('Asset manifest does not exist at `$url` – ignoring.');
+        // printWarning('Asset manifest does not exist at `$url` – ignoring.');
         return Uint8List.fromList(utf8.encode('{}')).buffer.asByteData();
       }
       rethrow;
     }
 
-    final String? constructorName =
-        target == null ? 'null' : domGetConstructorName(target);
-    printWarning('Caught ProgressEvent with unknown target: '
-        '$constructorName');
+    // final String? constructorName =
+    //     target == null ? 'null' : domGetConstructorName(target);
+    // printWarning('Caught ProgressEvent with unknown target: '
+    //     '$constructorName');
     rethrow;
   }
 }
@@ -1539,6 +1474,7 @@ Future<_DomResponse> _rawHttpPost(String url, String data) =>
 /// is meant for tests only.
 @visibleForTesting
 Future<HttpFetchResponse> testOnlyHttpPost(String url, String data) async {
+  throw 'Not implemented';
   // try {
   //   final _DomResponse domResponse = await _rawHttpPost(url, data);
   //   return HttpFetchResponseImpl._(url, domResponse);
@@ -1722,7 +1658,8 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
   /// Returns the data as a [ByteBuffer].
   @override
   Future<ByteBuffer> asByteBuffer() async {
-    return (await _domResponse.arrayBuffer())! as ByteBuffer;
+    return byteData.buffer;
+    // return (await _domResponse.arrayBuffer())! as ByteBuffer;
   }
 
   /// Returns the data parsed as JSON.
@@ -1834,8 +1771,7 @@ extension _DomResponseExtension on _DomResponse {
 
   @JS('arrayBuffer')
   external JSPromise _arrayBuffer();
-  Future<Object?> arrayBuffer() =>
-      js_util.promiseToFuture<Object?>(_arrayBuffer());
+  Future<Object?> arrayBuffer() => js_util.promiseToFuture<Object?>(_arrayBuffer());
 
   @JS('json')
   external JSPromise _json();
@@ -1871,8 +1807,7 @@ class _DomStreamReader {}
 extension _DomStreamReaderExtension on _DomStreamReader {
   @JS('read')
   external JSPromise _read();
-  Future<_DomStreamChunk> read() =>
-      js_util.promiseToFuture<_DomStreamChunk>(_read());
+  Future<_DomStreamChunk> read() => js_util.promiseToFuture<_DomStreamChunk>(_read());
 }
 
 @JS()
@@ -1970,25 +1905,21 @@ DomRect createDomRectFromPoints(DomPoint a, DomPoint b) {
 @JS('DOMRect')
 @staticInterop
 class DomRect extends DomRectReadOnly {
-  external factory DomRect(
-      JSNumber left, JSNumber top, JSNumber width, JSNumber height);
+  external factory DomRect(JSNumber left, JSNumber top, JSNumber width, JSNumber height);
 }
 
 @JS('FontFace')
 @staticInterop
 class DomFontFace {
   external factory DomFontFace._args2(JSString family, JSAny source);
-  external factory DomFontFace._args3(
-      JSString family, JSAny source, JSAny descriptors);
+  external factory DomFontFace._args3(JSString family, JSAny source, JSAny descriptors);
 }
 
-DomFontFace createDomFontFace(String family, Object source,
-    [Map<Object?, Object?>? descriptors]) {
+DomFontFace createDomFontFace(String family, Object source, [Map<Object?, Object?>? descriptors]) {
   if (descriptors == null) {
     return DomFontFace._args2(family.toJS, source.toJSAnyShallow);
   } else {
-    return DomFontFace._args3(
-        family.toJS, source.toJSAnyShallow, descriptors.toJSAnyDeep);
+    return DomFontFace._args3(family.toJS, source.toJSAnyShallow, descriptors.toJSAnyDeep);
   }
 }
 
@@ -2016,8 +1947,7 @@ extension DomFontFaceSetExtension on DomFontFaceSet {
 
   @JS('forEach')
   external JSVoid _forEach(JSFunction callback);
-  void forEach(DomFontFaceSetForEachCallback callback) =>
-      _forEach(callback.toJS);
+  void forEach(DomFontFaceSetForEachCallback callback) => _forEach(callback.toJS);
 }
 
 typedef DomFontFaceSetForEachCallback = void Function(
@@ -2082,8 +2012,7 @@ extension DomHTMLTextAreaElementExtension on DomHTMLTextAreaElement {
   @JS('setSelectionRange')
   external JSVoid _setSelectionRange1(JSNumber start, JSNumber end);
   @JS('setSelectionRange')
-  external JSVoid _setSelectionRange2(
-      JSNumber start, JSNumber end, JSString direction);
+  external JSVoid _setSelectionRange2(JSNumber start, JSNumber end, JSString direction);
   void setSelectionRange(int start, int end, [String? direction]) {
     if (direction == null) {
       _setSelectionRange1(start.toJS, end.toJS);
@@ -2112,8 +2041,7 @@ extension DomClipboardExtension on DomClipboard {
 
   @JS('writeText')
   external JSPromise _writeText(JSString data);
-  Future<dynamic> writeText(String data) =>
-      js_util.promiseToFuture(_writeText(data.toJS));
+  Future<dynamic> writeText(String data) => js_util.promiseToFuture(_writeText(data.toJS));
 }
 
 @JS()
@@ -2173,8 +2101,7 @@ extension DomKeyboardEventExtension on DomKeyboardEvent {
   bool getModifierState(String keyArg) => _getModifierState(keyArg.toJS).toDart;
 }
 
-DomKeyboardEvent createDomKeyboardEvent(String type,
-    [Map<dynamic, dynamic>? init]) {
+DomKeyboardEvent createDomKeyboardEvent(String type, [Map<dynamic, dynamic>? init]) {
   if (init == null) {
     return DomKeyboardEvent.arg1(type.toJS);
   } else {
@@ -2248,8 +2175,7 @@ class DomPopStateEvent extends DomEvent {
   external factory DomPopStateEvent.arg2(JSString type, JSAny initDict);
 }
 
-DomPopStateEvent createDomPopStateEvent(
-    String type, Map<Object?, Object?>? eventInitDict) {
+DomPopStateEvent createDomPopStateEvent(String type, Map<Object?, Object?>? eventInitDict) {
   if (eventInitDict == null) {
     return DomPopStateEvent.arg1(type.toJS);
   } else {
@@ -2270,8 +2196,7 @@ class DomURL {}
 extension DomURLExtension on DomURL {
   @JS('createObjectURL')
   external JSString _createObjectURL(JSAny object);
-  String createObjectURL(Object object) =>
-      _createObjectURL(object.toJSAnyShallow).toDart;
+  String createObjectURL(Object object) => _createObjectURL(object.toJSAnyShallow).toDart;
 
   @JS('revokeObjectURL')
   external JSVoid _revokeObjectURL(JSString url);
@@ -2284,11 +2209,9 @@ class DomBlob {
   external factory DomBlob(JSArray parts);
 }
 
-DomBlob createDomBlob(List<Object?> parts) =>
-    DomBlob(parts.toJSAnyShallow as JSArray);
+DomBlob createDomBlob(List<Object?> parts) => DomBlob(parts.toJSAnyShallow as JSArray);
 
-typedef DomMutationCallback = void Function(
-    JSArray mutation, DomMutationObserver observer);
+typedef DomMutationCallback = void Function(JSArray mutation, DomMutationObserver observer);
 
 @JS('MutationObserver')
 @staticInterop
@@ -2304,8 +2227,7 @@ extension DomMutationObserverExtension on DomMutationObserver {
 
   @JS('observe')
   external JSVoid _observe(DomNode target, JSAny options);
-  void observe(DomNode target,
-      {bool? childList, bool? attributes, List<String>? attributeFilter}) {
+  void observe(DomNode target, {bool? childList, bool? attributes, List<String>? attributeFilter}) {
     final Map<String, dynamic> options = <String, dynamic>{
       if (childList != null) 'childList': childList,
       if (attributes != null) 'attributes': attributes,
@@ -2484,8 +2406,7 @@ extension DomPointerEventExtension on DomPointerEvent {
       _getCoalescedEvents().toDart.cast<DomPointerEvent>();
 }
 
-DomPointerEvent createDomPointerEvent(String type,
-    [Map<dynamic, dynamic>? init]) {
+DomPointerEvent createDomPointerEvent(String type, [Map<dynamic, dynamic>? init]) {
   if (init == null) {
     return DomPointerEvent.arg1(type.toJS);
   } else {
@@ -2556,8 +2477,7 @@ extension DomTouchEventExtension on DomTouchEvent {
 
   @JS('changedTouches')
   external _DomTouchList get _changedTouches;
-  Iterable<DomTouch> get changedTouches =>
-      createDomTouchListWrapper<DomTouch>(_changedTouches);
+  Iterable<DomTouch> get changedTouches => createDomTouchListWrapper<DomTouch>(_changedTouches);
 }
 
 @JS('Touch')
@@ -2612,8 +2532,7 @@ extension DomCompositionEventExtension on DomCompositionEvent {
   String? get data => _data?.toDart;
 }
 
-DomCompositionEvent createDomCompositionEvent(String type,
-    [Map<dynamic, dynamic>? options]) {
+DomCompositionEvent createDomCompositionEvent(String type, [Map<dynamic, dynamic>? options]) {
   if (options == null) {
     return DomCompositionEvent.arg1(type.toJS);
   } else {
@@ -2685,8 +2604,7 @@ extension DomHTMLInputElementExtension on DomHTMLInputElement {
   @JS('setSelectionRange')
   external JSVoid _setSelectionRange1(JSNumber start, JSNumber end);
   @JS('setSelectionRange')
-  external JSVoid _setSelectionRange2(
-      JSNumber start, JSNumber end, JSString direction);
+  external JSVoid _setSelectionRange2(JSNumber start, JSNumber end, JSString direction);
   void setSelectionRange(int start, int end, [String? direction]) {
     if (direction == null) {
       _setSelectionRange1(start.toJS, end.toJS);
@@ -2859,8 +2777,7 @@ extension DomShadowRootExtension on DomShadowRoot {
 
   @JS('elementFromPoint')
   external DomElement? _elementFromPoint(JSNumber x, JSNumber y);
-  DomElement? elementFromPoint(int x, int y) =>
-      _elementFromPoint(x.toJS, y.toJS);
+  DomElement? elementFromPoint(int x, int y) => _elementFromPoint(x.toJS, y.toJS);
 }
 
 @JS()
@@ -2874,8 +2791,7 @@ class DomCSSStyleSheet extends DomStyleSheet {}
 extension DomCSSStyleSheetExtension on DomCSSStyleSheet {
   @JS('cssRules')
   external _DomList get _cssRules;
-  Iterable<DomCSSRule> get cssRules =>
-      createDomListWrapper<DomCSSRule>(_cssRules);
+  Iterable<DomCSSRule> get cssRules => createDomListWrapper<DomCSSRule>(_cssRules);
 
   @JS('insertRule')
   external JSNumber _insertRule1(JSString rule);
@@ -2917,8 +2833,7 @@ class DomScreenOrientation extends DomEventTarget {}
 extension DomScreenOrientationExtension on DomScreenOrientation {
   @JS('lock')
   external JSPromise _lock(JSString orientation);
-  Future<dynamic> lock(String orientation) =>
-      js_util.promiseToFuture(_lock(orientation.toJS));
+  Future<dynamic> lock(String orientation) => js_util.promiseToFuture(_lock(orientation.toJS));
 
   external JSVoid unlock();
 }
@@ -2928,8 +2843,7 @@ extension DomScreenOrientationExtension on DomScreenOrientation {
 // remove the listener. Caller is still responsible for calling [allowInterop]
 // on the listener before creating the subscription.
 class DomSubscription {
-  DomSubscription(
-      this.target, String typeString, DartDomEventListener dartListener)
+  DomSubscription(this.target, String typeString, DartDomEventListener dartListener)
       : type = typeString.toJS,
         listener = createDomEventListener(dartListener) {
     target._addEventListener1(type, listener);
@@ -3050,8 +2964,7 @@ DomResizeObserver? createDomResizeObserver(DomResizeObserverCallbackFn fn) =>
 /// See: https://developer.mozilla.org/en-US/docs/Web/API/ResizeObserver#instance_methods
 extension DomResizeObserverExtension on DomResizeObserver {
   external JSVoid disconnect();
-  external JSVoid observe(DomElement target,
-      [DomResizeObserverObserveOptions options]);
+  external JSVoid observe(DomElement target, [DomResizeObserverObserveOptions options]);
   external JSVoid unobserve(DomElement target);
 }
 
@@ -3156,8 +3069,7 @@ extension DomTrustedTypePolicyExtension on DomTrustedTypePolicy {
   /// `input` is a string containing the data to be _sanitized_ by the policy.
   @JS('createScriptURL')
   external DomTrustedScriptURL _createScriptURL(JSString input);
-  DomTrustedScriptURL createScriptURL(String input) =>
-      _createScriptURL(input.toJS);
+  DomTrustedScriptURL createScriptURL(String input) => _createScriptURL(input.toJS);
 }
 
 /// Represents a string that a developer can insert into an _injection sink_
@@ -3196,9 +3108,8 @@ final DomTrustedTypePolicy _ttPolicy = domWindow.trustedTypes!.createPolicy(
     if (_expectedFilesForTT.contains(uri.pathSegments.last)) {
       return uri.toString().toJS;
     }
-    domWindow.console
-        .error('URL rejected by TrustedTypes policy flutter-engine: $url'
-            '(download prevented)');
+    domWindow.console.error('URL rejected by TrustedTypes policy flutter-engine: $url'
+        '(download prevented)');
 
     return null;
   }.toJS),
@@ -3275,8 +3186,7 @@ class _DomListWrapper<T> extends Iterable<T> {
 
 /// This is a work around for a `TypeError` which can be triggered by calling
 /// `toList` on the `Iterable`.
-Iterable<T> createDomListWrapper<T>(_DomList list) =>
-    _DomListWrapper<T>._(list).cast<T>();
+Iterable<T> createDomListWrapper<T>(_DomList list) => _DomListWrapper<T>._(list).cast<T>();
 
 // https://developer.mozilla.org/en-US/docs/Web/API/TouchList
 @JS()
@@ -3353,8 +3263,7 @@ extension DomIntlExtension on DomIntl {
 
 /// Similar to [js_util.callMethod] but allows for providing a non-string method
 /// name.
-T _jsCallMethod<T>(Object o, Object method,
-    [List<Object?> args = const <Object?>[]]) {
+T _jsCallMethod<T>(Object o, Object method, [List<Object?> args = const <Object?>[]]) {
   final Object actualMethod = js_util.getProperty(o, method);
   return js_util.callMethod<T>(actualMethod, 'apply', <Object?>[o, args]);
 }
@@ -3382,8 +3291,7 @@ class DomSegments {}
 
 extension DomSegmentsExtension on DomSegments {
   DomIteratorWrapper<DomSegment> iterator() {
-    final DomIterator segmentIterator =
-        _jsCallMethod(this, domSymbol.iterator) as DomIterator;
+    final DomIterator segmentIterator = _jsCallMethod(this, domSymbol.iterator) as DomIterator;
     return DomIteratorWrapper<DomSegment>(segmentIterator);
   }
 }
@@ -3496,6 +3404,5 @@ DomV8BreakIterator createV8BreakIterator() {
     throw UnimplementedError('v8BreakIterator is not supported.');
   }
 
-  return DomV8BreakIterator(
-      <JSAny?>[].toJS, const <String, String>{'type': 'line'}.toJSAnyDeep);
+  return DomV8BreakIterator(<JSAny?>[].toJS, const <String, String>{'type': 'line'}.toJSAnyDeep);
 }

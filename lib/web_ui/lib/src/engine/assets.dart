@@ -86,8 +86,7 @@ class AssetManager {
   /// must URL-encode the asset key *again* so when it is decoded, it is
   /// requesting the once-URL-encoded asset key.
   Future<HttpFetchResponse> loadAsset(String asset) async {
-    print('AZAZAZAZAZ Calling AssetManager.loadAsset');
-    final result = await load(asset);
+    final ByteData result = await load(asset);
 
     return HttpFetchResponseImpl.fromByteData(result, asset);
   }

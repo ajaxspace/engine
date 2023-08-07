@@ -1426,7 +1426,6 @@ Future<HttpFetchResponse> httpFetch(String url) async {
 }
 
 Future<ByteData> load(String asset) async {
-  print('AZAZAZAZAZ Calling AssetManager.load');
   final String url = asset;
   try {
     final DomXMLHttpRequest request = await domHttpRequest(url, responseType: 'arraybuffer');
@@ -1646,32 +1645,47 @@ abstract class HttpFetchPayload {
 }
 
 class HttpFetchPayloadImpl extends HttpFetchPayload {
-  HttpFetchPayloadImpl(this.byteData);
+  HttpFetchPayloadImpl(
+    this.byteData, [
+    this._domResponse,
+  ]);
 
+  final _DomResponse? _domResponse;
   final ByteData byteData;
 
   @override
   Future<dynamic> toJson() {
-    return Future.value(json.decode(utf8.decode(byteData.buffer.asUint8List())));
+    return Future<dynamic>.value(json.decode(utf8.decode(byteData.buffer.asUint8List())));
   }
 
   /// Returns the data as a [ByteBuffer].
   @override
   Future<ByteBuffer> asByteBuffer() async {
     return byteData.buffer;
-    // return (await _domResponse.arrayBuffer())! as ByteBuffer;
   }
 
-  /// Returns the data parsed as JSON.
   @override
-  Future<void> read<T>(reader) {
-    throw 'AZAZA NOT IMPLEMENTED READ';
+  Future<void> read<T>(HttpFetchReader<T> reader) async {
+    if (_domResponse == null) {
+      throw UnimplementedError();
+    }
+
+    final _DomReadableStream stream = _domResponse!.body;
+    final _DomStreamReader domReader = stream.getReader();
+
+    while (true) {
+      final _DomStreamChunk chunk = await domReader.read();
+      if (chunk.done) {
+        break;
+      }
+      reader(chunk.value as T);
+    }
   }
 
   /// Return the data as a string.
   @override
   Future<String> text() {
-    return Future.value(String.fromCharCodes(byteData.buffer.asUint8List()));
+    return Future<String>.value(String.fromCharCodes(byteData.buffer.asUint8List()));
   }
 }
 

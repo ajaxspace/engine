@@ -375,11 +375,16 @@ class KeyboardConverter {
   }
 
   void _handleEvent(FlutterHtmlKeyboardEvent event) {
+    print('AZAZAZAZA _handleEvent');
     final Duration timeStamp = _eventTimeStampToDuration(event.timeStamp!);
 
     final String eventKey = event.key!;
 
+    print('AZAZAZAZA _handleEvent - $eventKey');
+
     final int physicalKey = _getPhysicalCode(event.code!);
+
+    print('AZAZAZAZA _handleEvent - $physicalKey');
     final bool logicalKeyIsCharacter = !_eventKeyIsKeyName(eventKey);
     // The function body might or might not be evaluated. If the event is a key
     // up event, the resulting event will simply use the currently pressed

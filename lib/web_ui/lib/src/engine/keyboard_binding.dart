@@ -394,6 +394,23 @@ class KeyboardConverter {
       final int? mappedLogicalKey = kWebToLogicalKey[eventKey];
       print('AZAZAZAZA logicalKey() 1 - $mappedLogicalKey');
       if (mappedLogicalKey != null) {
+        if(mappedLogicalKey == 0x00100000001) {
+          print('AZAZAZAZA _handleEvent physical hey is default');
+          switch(event.keyCode) {
+            case 412:
+              return 0x00100000d31;
+            break;
+              case 413:
+            return 0x000c00b7;
+              break;
+            case 415:
+              return 0x00100000d2f;
+            break;
+              case 417:
+            return 0x000c00b3;
+              break;
+          }
+        }
         return mappedLogicalKey;
       }
       print('AZAZAZAZA logicalKey() 2');
@@ -417,24 +434,6 @@ class KeyboardConverter {
         return _deadKeyToLogicalKey(physicalKey, event);
       }
       // Minted logical keys.
-print('AZAZAZAZA logicalKey() 5 - $physicalKey');
-      if(physicalKey == _kWebKeyIdPlane) {
-      print('AZAZAZAZA _handleEvent physical hey is default');
-      switch(event.keyCode) {
-        case 412:
-        return 0x00100000d31;
-        break;
-        case 413:
-        return 0x000c00b7;
-        break;
-        case 415:
-        return 0x00100000d2f;
-        break;
-        case 417:
-        return 0x000c00b3;
-        break;
-      }
-    }
 print('AZAZAZAZA _handleEvent return default key code - ${eventKey.hashCode + _kWebKeyIdPlane}');
       return eventKey.hashCode + _kWebKeyIdPlane;
       

@@ -378,30 +378,9 @@ class KeyboardConverter {
     final Duration timeStamp = _eventTimeStampToDuration(event.timeStamp!);
     //98784247808
 
-    var String eventKey = event.key!;
+    final eventKey = event.key!;
 
-    print('AZAZAZAZA _handleEvent code - ${event.code}');
-    print('AZAZAZAZA _handleEvent keyCode - ${event.keyCode}');
-
-    int physicalKey = _getPhysicalCode(event.code!);
-
-    if(physicalKey == _kWebKeyIdPlane) {
-      print('AZAZAZAZA _handleEvent physical hey is default');
-      switch(event.keyCode) {
-        case 412:
-        physicalKey = 0x00100000d31;
-        break;
-        case 413:
-        physicalKey = 0x000c00b7;
-        break;
-        case 415:
-        physicalKey = 0x00100000d2f;
-        break;
-        case 417:
-        physicalKey = 0x000c00b3;
-        break;
-      }
-    }
+    final physicalKey = _getPhysicalCode(event.code!);
 
     print('AZAZAZAZA _handleEvent physical hey is changed to $physicalKey');
 
@@ -433,8 +412,27 @@ class KeyboardConverter {
         return _deadKeyToLogicalKey(physicalKey, event);
       }
       // Minted logical keys.
+
+      if(physicalKey == _kWebKeyIdPlane) {
+      print('AZAZAZAZA _handleEvent physical hey is default');
+      switch(event.keyCode) {
+        case 412:
+        physicalKey = 0x00100000d31;
+        break;
+        case 413:
+        physicalKey = 0x000c00b7;
+        break;
+        case 415:
+        physicalKey = 0x00100000d2f;
+        break;
+        case 417:
+        physicalKey = 0x000c00b3;
+        break;
+      }
+    }
+print('AZAZAZAZA _handleEvent return default key code - ${eventKey.hashCode + _kWebKeyIdPlane}');
       return eventKey.hashCode + _kWebKeyIdPlane;
-      print('AZAZAZAZA _handleEvent return default key code - ${eventKey.hashCode + _kWebKeyIdPlane}');
+      
     });
 
     assert(event.type == 'keydown' || event.type == 'keyup');

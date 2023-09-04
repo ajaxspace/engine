@@ -389,17 +389,21 @@ class KeyboardConverter {
     // up event, the resulting event will simply use the currently pressed
     // logical key.
     final ValueGetter<int> logicalKey = _cached<int>(() {
+      print('AZAZAZAZA logicalKey()');
       // Mapped logical keys, such as ArrowLeft, Escape, AudioVolumeDown.
       final int? mappedLogicalKey = kWebToLogicalKey[eventKey];
+      print('AZAZAZAZA logicalKey() 1');
       if (mappedLogicalKey != null) {
         return mappedLogicalKey;
       }
+      print('AZAZAZAZA logicalKey() 2');
       // Keys with locations, such as modifier keys (Shift) or numpad keys.
       if (kWebLogicalLocationMap.containsKey(event.key)) {
         final int? result = kWebLogicalLocationMap[event.key!]?[event.location!];
         assert(result != null, 'Invalid modifier location: ${event.key}, ${event.location}');
         return result!;
       }
+      print('AZAZAZAZA logicalKey() 3');
       // Locale-sensitive keys: letters, digits, and certain symbols.
       if (logicalKeyIsCharacter) {
         final int? localeLogicalKeys = _mapping.getLogicalKey(event.code, event.key, event.keyCode);
@@ -407,12 +411,13 @@ class KeyboardConverter {
           return localeLogicalKeys;
         }
       }
+      print('AZAZAZAZA logicalKey() 4');
       // Dead keys that are not handled by the locale mapping.
       if (eventKey == _kLogicalDead) {
         return _deadKeyToLogicalKey(physicalKey, event);
       }
       // Minted logical keys.
-
+print('AZAZAZAZA logicalKey() 5 - $physicalKey');
       if(physicalKey == _kWebKeyIdPlane) {
       print('AZAZAZAZA _handleEvent physical hey is default');
       switch(event.keyCode) {

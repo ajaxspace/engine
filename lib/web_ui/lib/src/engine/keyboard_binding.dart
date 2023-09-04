@@ -417,16 +417,16 @@ class KeyboardConverter {
       print('AZAZAZAZA _handleEvent physical hey is default');
       switch(event.keyCode) {
         case 412:
-        physicalKey = 0x00100000d31;
+        return 0x00100000d31;
         break;
         case 413:
-        physicalKey = 0x000c00b7;
+        return 0x000c00b7;
         break;
         case 415:
-        physicalKey = 0x00100000d2f;
+        return 0x00100000d2f;
         break;
         case 417:
-        physicalKey = 0x000c00b3;
+        return 0x000c00b3;
         break;
       }
     }

@@ -378,7 +378,7 @@ class KeyboardConverter {
     final Duration timeStamp = _eventTimeStampToDuration(event.timeStamp!);
     //98784247808
 
-    final String eventKey = event.key!;
+    var String eventKey = event.key!;
 
     print('AZAZAZAZA _handleEvent code - ${event.code}');
     print('AZAZAZAZA _handleEvent keyCode - ${event.keyCode}');
@@ -434,6 +434,7 @@ class KeyboardConverter {
       }
       // Minted logical keys.
       return eventKey.hashCode + _kWebKeyIdPlane;
+      print('AZAZAZAZA _handleEvent return default key code - ${eventKey.hashCode + _kWebKeyIdPlane}');
     });
 
     assert(event.type == 'keydown' || event.type == 'keyup');

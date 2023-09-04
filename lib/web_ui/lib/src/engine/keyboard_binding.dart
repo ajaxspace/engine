@@ -394,21 +394,13 @@ class KeyboardConverter {
           
           switch(event.keyCode) {
             case 412:
-              physicalKey = 0x00100000d31;
               return 0x00100000d31; //Rewind
-              break;
             case 413:
-              physicalKey = 0x00100000a07;
               return 0x00100000a07; // Stop
-              break;
             case 415:
-              physicalKey = 0x00100000d2f;
               return 0x00100000d2f; //Play
-              break;
             case 417:
-                physicalKey = 0x00100000d2c;
-                return 0x00100000d2c; // Fast Forward
-                break;
+              return 0x00100000d2c; // Fast Forward
           }
         }
         return mappedLogicalKey;

@@ -383,7 +383,7 @@ class KeyboardConverter {
     print('AZAZAZAZA _handleEvent code - ${event.code}');
     print('AZAZAZAZA _handleEvent keyCode - ${event.keyCode}');
 
-    var physicalKey = _getPhysicalCode(event.code!);
+    int physicalKey = _getPhysicalCode(event.code!);
 
     if(physicalKey == _kWebKeyIdPlane) {
       print('AZAZAZAZA _handleEvent physical hey is default');

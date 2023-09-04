@@ -389,10 +389,10 @@ class KeyboardConverter {
     // up event, the resulting event will simply use the currently pressed
     // logical key.
     final ValueGetter<int> logicalKey = _cached<int>(() {
-      print('AZAZAZAZA logicalKey()');
+      print('AZAZAZAZA logicalKey() - $eventKey');
       // Mapped logical keys, such as ArrowLeft, Escape, AudioVolumeDown.
       final int? mappedLogicalKey = kWebToLogicalKey[eventKey];
-      print('AZAZAZAZA logicalKey() 1');
+      print('AZAZAZAZA logicalKey() 1 - $mappedLogicalKey');
       if (mappedLogicalKey != null) {
         return mappedLogicalKey;
       }

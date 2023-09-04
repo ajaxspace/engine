@@ -383,7 +383,27 @@ class KeyboardConverter {
     print('AZAZAZAZA _handleEvent code - ${event.code}');
     print('AZAZAZAZA _handleEvent keyCode - ${event.keyCode}');
 
-    final int physicalKey = _getPhysicalCode(event.code!);
+    var physicalKey = _getPhysicalCode(event.code!);
+
+    if(physicalKey == _kWebKeyIdPlane) {
+      print('AZAZAZAZA _handleEvent physical hey is default');
+      switch(event.keyCode) {
+        case: 412:
+        physicalKey = 0x00100000d31;
+        break;
+        case: 413:
+        physicalKey = 0x000c00b7;
+        break;
+        case: 415:
+        physicalKey = 0x00100000d2f;
+        break;
+        case: 417:
+        physicalKey = 0x000c00b3;
+        break;
+      }
+    }
+
+    print('AZAZAZAZA _handleEvent physical hey is changed to $physicalKey');
 
     final bool logicalKeyIsCharacter = !_eventKeyIsKeyName(eventKey);
     // The function body might or might not be evaluated. If the event is a key

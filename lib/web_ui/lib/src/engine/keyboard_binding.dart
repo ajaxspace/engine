@@ -390,9 +390,7 @@ class KeyboardConverter {
       // Mapped logical keys, such as ArrowLeft, Escape, AudioVolumeDown.
       final int? mappedLogicalKey = kWebToLogicalKey[eventKey];
       if (mappedLogicalKey != null) {
-        if(mappedLogicalKey == 0x00100000001) {
-          print('AZAZAZA ENGINE - ${event.keyCode}');
-          
+        if(mappedLogicalKey == 0x00100000001) {        
           switch(event.keyCode) {
             case 412:
               return 0x00100000d31; //Rewind

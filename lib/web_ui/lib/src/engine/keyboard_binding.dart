@@ -391,6 +391,7 @@ class KeyboardConverter {
       final int? mappedLogicalKey = kWebToLogicalKey[eventKey];
       if (mappedLogicalKey != null) {
         if(mappedLogicalKey == 0x00100000001) {
+          print('AZAZAZA ENGINE - ${event.keyCode}');
           
           switch(event.keyCode) {
             case 412:

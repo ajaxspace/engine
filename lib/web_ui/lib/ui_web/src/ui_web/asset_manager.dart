@@ -117,7 +117,5 @@ class AssetManager {
           '$constructorName');
       rethrow;
     }
-
-    return (await response.payload.asByteBuffer()).asByteData();
   }
 }

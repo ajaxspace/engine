@@ -1672,6 +1672,8 @@ HttpFetchResponseImpl._(
 
   HttpFetchPayload payload;
 
+  int? contentLength;
+
   int status;
 
   String url;
@@ -1730,7 +1732,7 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
     this._domResponse,
   ]);
 
-  final _DomResponse? _domResponse;
+  final DomResponse? _domResponse;
   final ByteData byteData;
 
   Future<dynamic> toJson() {
@@ -1798,7 +1800,7 @@ class MockHttpFetchPayload implements HttpFetchPayload {
   Future<ByteBuffer> asByteBuffer() async => _byteBuffer;
 
   @override
-  Future<dynamic> json() async => throw AssertionError('json not supported by mock');
+  Future<dynamic> toJson() async => throw AssertionError('json not supported by mock');
 
   @override
   Future<String> text() async => throw AssertionError('text not supported by mock');

@@ -1735,6 +1735,7 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
   final DomResponse? _domResponse;
   final ByteData byteData;
 
+  @override
   Future<dynamic> toJson() {
     return Future<dynamic>.value(
         json.decode(utf8.decode(byteData.buffer.asUint8List())));
@@ -1746,8 +1747,10 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
     return byteData.buffer;
   }
 
+  @override
   Future<void> read<T>(HttpFetchReader<T> reader) async {
     if (_domResponse == null) {
+      print('AZAZAZA _domResponse == null');
       throw UnimplementedError();
     }
 
@@ -1764,6 +1767,7 @@ class HttpFetchPayloadImpl extends HttpFetchPayload {
   }
 
   /// Return the data as a string.
+  @override
   Future<String> text() {
     return Future<String>.value(
         String.fromCharCodes(byteData.buffer.asUint8List()));

@@ -21,6 +21,9 @@ const Map<String, String> testFontUrls = <String, String>{
   'RobotoVariable': '/assets/fonts/RobotoSlab-VariableFont_wght.ttf',
 };
 
+/// Provides the [AssetManager] used by the Flutter Engine.
+AssetManager get assetManager => engineAssetManager;
+
 /// This class downloads assets over the network.
 ///
 /// Assets are resolved relative to [assetsDir] inside the absolute base
